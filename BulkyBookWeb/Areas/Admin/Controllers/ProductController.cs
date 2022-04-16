@@ -32,7 +32,7 @@ namespace BulkyBookWeb.Controllers
                     Text = u.Name,
                     Value = u.Id.ToString()
                 });
-            IEnumerable<SelectListItem> CoverTypeListList = _unitOfWork.CoverType.GetAll().Select(
+            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
                 u => new SelectListItem
                 {
                     Text = u.Name,
@@ -43,6 +43,7 @@ namespace BulkyBookWeb.Controllers
             {
                 //Create Product
                 ViewBag.CategoryList=CategoryList;
+                ViewData["CoverTypeList"] = CoverTypeList;
                 return View(product);
             }
             else
