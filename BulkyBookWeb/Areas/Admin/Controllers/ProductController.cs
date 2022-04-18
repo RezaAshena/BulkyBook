@@ -52,10 +52,10 @@ namespace BulkyBookWeb.Controllers
             }
             else
             {
+                productVM.Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+                return View(productVM);
                 //Update Product
             }
-
-            return View(productVM);
         }
 
         //Post
@@ -125,7 +125,7 @@ namespace BulkyBookWeb.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var productList = _unitOfWork.Product.GetAll(includeProperties:"Category,CoverType");//look at Reporitory for Casesensetive
+            var productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");//look at Reporitory for Casesensetive
             return Json(new { data = productList });
         }
         #endregion
