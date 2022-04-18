@@ -65,13 +65,21 @@ namespace BulkyBookWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                //_unitOfWork.CoverType.Update(obj);
                 string wwwRootPath = _hostEnvironment.WebRootPath;
                 if (file != null)
                 {
                     string fileName = Guid.NewGuid().ToString();
                     var uploads = Path.Combine(wwwRootPath, @"images\products");
                     var extension = Path.GetExtension(file.FileName);
+
+                    if(obj.Product.ImageUrl != null)
+                    {
+                        var oldImagePath=Path.Combine(wwwRootPath,obj.Product.ImageUrl.TrimStart('\\'));
+                        if(System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
 
                     using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
                     {
@@ -80,7 +88,14 @@ namespace BulkyBookWeb.Controllers
                     obj.Product.ImageUrl = @"\images\products\" + fileName + extension;
 
                 }
-                _unitOfWork.Product.Add(obj.Product);
+                if (obj.Product.Id == 0)
+                {
+                    _unitOfWork.Product.Add(obj.Product);
+                }
+                else
+                {
+                    _unitOfWork.Product.Update(obj.Product);
+                }
                 _unitOfWork.Save();
                 TempData["success"] = "CoverType updated successfully";
                 TempData["success"] = "Product created successfully";
