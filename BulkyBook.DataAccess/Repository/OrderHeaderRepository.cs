@@ -18,8 +18,6 @@ namespace BulkyBook.DataAccess.Repository
             _db = db;
         }
 
-
-
         public void Update(OrderHeader obj)
         {
             _db.OrderHeaders.Update(obj);
@@ -36,6 +34,13 @@ namespace BulkyBook.DataAccess.Repository
                     orderFromDb.PaymentStatus = paymentStatus;
                 }
             }
+        }
+
+        public void UpdateStripePaymentID(int id, string sessionId, string paymentIntentId = null)
+        {
+            var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
+            orderFromDb.SessionId = sessionId;
+            orderFromDb.PaymentIntentId = paymentIntentId;
         }
     }
 }
